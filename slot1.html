@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スロットゲーム</title>
+</head>
+<body>
+    <h3>SLOT</h3>
+    <hr>
+    <form name="slot">
+        <table border="2">
+            <tr>
+                <th colspan="3">
+                    <div id="score">0 Points</div>
+                </th>
+            </tr>
+            <tr>
+                <td><div style="color: blue; text-align: center" id="dram0">☆</div></td>
+                <td><div style="color: blue; text-align: center" id="dram1">☆</div></td>
+                <td><div style="color: blue; text-align: center" id="dram2">☆</div></td>
+            </tr>
+            <tr>
+                <td><input type="button" value="STOP" onclick="dramstop(0)"></td>
+                <td><input type="button" value="STOP" onclick="dramstop(1)"></td>
+                <td><input type="button" value="STOP" onclick="dramstop(2)"></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div style="text-align: center"><input type="button" value="RESET" onclick="dramreset()"></div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <script type="text/javascript">
+        img = new Array("-", "■", "♪", "★");
+        deme = new Array();
+
+        // スコア300で初期化
+        scr = 300;
+
+        dramreset();
+
+        function dramreset() {
+            document.getElementById("dram0").innerHTML = img[0];
+            document.getElementById("dram1").innerHTML = img[0];
+            document.getElementById("dram2").innerHTML = img[0];
+            // RESETを押すことでSTOPボタンを再び押せるようにする
+            for (i = 0; i < 3; i++) {
+                document.slot.elements[i].disabled = false;
+            }
+            deme[0] = 0; deme[1] = 0; deme[2] = 0;
+            document.getElementById("score").innerHTML = scr + " Points";
+            // Scoreが0になったら、アラートを出し、すべてのボタンを使えなくする
+            if (scr === 0) {
+                window.alert("Score is now 0 points. Thank you for playing!");
+                for (i = 0; i < 4; i++) {
+                    document.slot.elements[i].disabled = true;
+                }
+            }
+            //RESETを押すたびにスコアを-10
+            scr -= 10;
+        }
+
+        function dramstop(btn) {
+            r = Math.floor(Math.random() * 4);
+            document.getElementById("dram" + btn).innerHTML = img[r];
+            document.slot.elements[btn].disabled = true;
+            deme[btn] = r;
+            if ((deme[0] === deme[1]) && (deme[0] === deme[2])) {
+                scr += r * 10;
+            }
+            document.getElementById("score").innerHTML = scr + " Points";
+        }
+    </script>
+</body>
+</html>
